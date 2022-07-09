@@ -765,6 +765,7 @@ public:
 
     inline void reset_pkt_in_flow(void);
     inline uint8_t get_plugin_id(void){
+        assert(m_template_info);
         return ( m_template_info->m_plugin_id);
     }
 
@@ -2871,7 +2872,6 @@ public:
     inline CFlowPktInfo * GetPacket(uint32_t index);
     void Append(CPacketIndication * pkt_indication);
     void RemoveAll();
-    void dump_pkt_sizes(void);
     enum load_cap_file_err load_cap_file(std::string cap_file, uint16_t _id, uint8_t plugin_id);
     enum load_cap_file_err load_cap_file(std::string cap_file, uint16_t _id, CFlowYamlInfo &flow_info);
 
@@ -3097,6 +3097,7 @@ class CTcpCtxCb;
 class CSyncBarrier;
 class CAstfDB;
 class CIpInfoBase;
+class CFlowBase;
 
 class CFlowGenListPerThread {
 
@@ -3352,7 +3353,7 @@ public:
     void remove_tcp_profile(profile_id_t profile_id);
     void Delete_tcp_ctx();
 
-    void generate_flow(bool &done, CPerProfileCtx * pctx);
+    void generate_flow(CPerProfileCtx * pctx, uint16_t tg_id = 0, CFlowBase* in_flow = nullptr);
 
     void handle_rx_flush(CGenNode * node,bool on_terminate);
     void handle_tx_fif(CGenNodeTXFIF * node,bool on_terminate);
@@ -3425,7 +3426,6 @@ public:
 public:
     void Dump(FILE *fd);
     void DumpCsv(FILE *fd);
-    void DumpPktSize();
     void UpdateFast();
     double GetCpuUtil();
     double GetCpuUtilRaw();
